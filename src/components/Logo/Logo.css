@@ -1,0 +1,19 @@
+.logo {
+    height: 100px;
+    width: 100px;
+    /* background-color: #7E9181; */
+    background-color: #A0AAB2;
+    margin: 25px 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 450px) {
+    .logo {
+        height: 50px;
+        width: 50px;
+        margin: 15px 20px;
+    }
+}

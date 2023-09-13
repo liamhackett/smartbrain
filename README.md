@@ -68,3 +68,20 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+Color Pallet
+2E3532
+7E9181
+8F9E9A
+A0AAB2
+C4CACF
+
+TODO:
+- Fix responsiveness
+
+Ideas to improve project:
+- Add ranking on another page and show the leaderboards highlighting the signed in user
+- Add a home page/landing page explaining whats going on
+    - Have a button that says Demo or try now
+- Maybe find an interesting font for the SmartBrain title

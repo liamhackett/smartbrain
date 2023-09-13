@@ -1,0 +1,31 @@
+.nav-bar {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+.title {
+    color: #C4CACF;
+    font-size: 48px;
+}
+
+.sign-out {
+    color: #C4CACF;
+    margin-right: 80px; /* Fix to have the title automatically centered always*/
+}
+
+@media (max-width: 768px) {
+    .title {
+        font-size: 36px; 
+    }
+    
+}
+
+@media (max-width: 450px) {
+    .title {
+        display: none;
+    }
+    .sign-out {
+        font-size: 16px !important;
+        margin: 0 10px;
+    }
+}
