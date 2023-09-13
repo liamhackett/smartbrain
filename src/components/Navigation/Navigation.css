@@ -10,7 +10,7 @@
 
 .sign-out {
     color: #C4CACF;
-    margin-right: 80px; /* Fix to have the title automatically centered always*/
+    margin-right: 25px; 
 }
 
 @media (max-width: 768px) {
@@ -21,11 +21,8 @@
 }
 
 @media (max-width: 450px) {
-    .title {
-        display: none;
-    }
     .sign-out {
         font-size: 16px !important;
-        margin: 0 10px;
+        margin-right: 10px;
     }
 }

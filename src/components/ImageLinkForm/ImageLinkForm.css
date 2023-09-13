@@ -15,6 +15,10 @@
     justify-content: center;
     align-items: center;
     width: 50vw;
+    /* Delete the below code to get rid of the background for the input box */
+    border-radius: 1em;
+    padding: 50px 25px;
+    background-color: #8F9E9A;
 }
 
 .focus:focus {
@@ -23,17 +27,20 @@
 }
 
 
-/* .btn-custom {
-    background-color: inherit; 
-    color: #A0AAB2; 
-    border: 2px solid #A0AAB2;
-  }
+.btn-custom {
+  background-color: inherit; 
+  color: #2E3532; 
+  border: 2px solid #2E3532;
+  margin-left: 10px;
+}
   
-  .btn-custom:hover {
-    background-color: #A0AAB2;
-    color: #333;
-  } */
+.btn-custom:hover {
+  background-color: #2E3532;
+  color: #C4CACF;
+}
 
+  /* 
+    This button custom is for if there is no background for the input
   .btn-custom {
     background-color: inherit; 
     color: #7E9181; 
@@ -44,7 +51,7 @@
   .btn-custom:hover {
     background-color: #7E9181;
     color: #333;
-  }
+  } */
 
   
 @media (max-width: 768px) {
