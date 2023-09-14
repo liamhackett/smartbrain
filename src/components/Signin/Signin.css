@@ -1,0 +1,56 @@
+.rounded-t-5 {
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+  }
+  .container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .sign-in-body{
+    background-color: #7E9181;
+    color: #2E3532;
+    max-width: 500px;
+  }
+  .sign-in-text {
+    color: #2E3532;
+  }
+  .link {
+    color: #2E3532;
+    opacity: .8;
+    cursor: pointer;
+  }
+
+  .link:hover{
+    opacity: 1;
+  }
+
+  .custom-btn{
+    border-color: #2E3532;
+    box-shadow: 0 0 0 0.2rem #2E3532;
+    background-color: #2E3532;
+    height: 40px;
+    color: #C4CACF;
+    margin: auto
+  }
+  .custom-btn:hover {
+    opacity: .75;
+    background-color: #2E3532;
+    border-color: #2E3532;
+    box-shadow: 0 0 0 0.2rem #2E3532;
+  }
+
+
+
+  .focus:focus{
+    border-color: #2e353280;
+    box-shadow: 0 0 0 0.2rem #2e353280;
+    outline: none;
+  }
+ 
+  @media (max-width: 550px) {
+    .rounded-tr-lg-0 {
+      border-top-right-radius: 0.5rem;
+      border-bottom-left-radius: 0rem;
+    }
+  }

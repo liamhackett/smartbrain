@@ -18,7 +18,7 @@
     /* Delete the below code to get rid of the background for the input box */
     border-radius: 1em;
     padding: 50px 25px;
-    background-color: #8F9E9A;
+    background-color: #7E9181;
 }
 
 .focus:focus {
@@ -54,9 +54,10 @@
   } */
 
   
-@media (max-width: 768px) {
+@media (max-width: 850px) {
   .input-container {
     flex-direction: column;
+    width: 85vw;
   }
   .focus {
     margin: 5px;

@@ -1,6 +1,6 @@
 import React from "react";
-import './Logo.css';
-import brain from './logo.png';
+import "./Logo.css";
+import brain from "./logo.png";
 
 const Logo = () => {
     return (

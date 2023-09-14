@@ -9,8 +9,12 @@
 }
 
 .sign-out {
-    color: #C4CACF;
+    color: #C4CACF !important;
     margin-right: 25px; 
+}
+
+.hide {
+    visibility: hidden;
 }
 
 @media (max-width: 768px) {

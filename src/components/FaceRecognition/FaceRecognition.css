@@ -1,0 +1,35 @@
+.center{
+    display: flex;
+    justify-content: center;
+}
+img {
+    border-radius: 1em;
+    width: 40vw;
+    /* width: 700px; */
+}
+
+.bounding-box {
+	position: absolute;
+	box-shadow: 0 0 0 3px #7E9181 inset;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+    border-radius: 1em;
+}
+
+@media (max-width: 850px) {
+    .container{
+        width: 85vw;
+    }
+    .image-container {
+        width: 75vw;
+    }
+    /* img{
+        width: 600px;
+    } */
+}
+/* @media (max-width: 500px) {
+    img{
+        width: 300px;
+    }
+} */
