@@ -1,7 +1,13 @@
 .sign-up-body{
     background-color: #7E9181;
     color: #2E3532;
+    max-width: 500px;
 }
+.container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 .sign-up-text {
     color: #2E3532;
 }

@@ -4,8 +4,8 @@ import "./Register.css";
 
 const Register = ({ onRouteChange }) => {
   return (
-    <Container className="my-5 container">
-      <Card className="sign-up-body">
+    <Container className="my-5">
+      <Card className="sign-up-body container shadow-2">
         <Row className="g-0 d-flex align-items-center">
           <Card.Body>
             <h1>Welcome to SmartBrain!</h1>
