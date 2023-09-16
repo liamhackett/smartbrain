@@ -48,10 +48,29 @@ class App extends Component {
       input: "",
       imageUrl: "",
       box: {},
-      route: "signin"
+      route: "signin",
+      user: {
+        id: "",
+        name: "",
+        email: "",
+        entries: 0,
+        joined: ""
+        
+      }
     }
   }
 
+  loadUser = (data) => {
+    this.setState({user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined
+      }
+    })
+
+  }
   onInputChange = (event) => {
     console.log(event.target.value);
     this.setState({input: event.target.value});
@@ -91,7 +110,21 @@ class App extends Component {
         .then(response => response.json())
         .then(result => {
           // this.displayCeleb(result.outputs[0].data.regions[0].data.concepts[0]); 
-          this.displayFaceBox(this.calculateFaceLocation(result));
+          if(result){
+              fetch("http://localhost:3001/image", 
+              {
+                method: "put",
+                headers: {"Content-type": "application/json"},
+                body: JSON.stringify({
+                  id: this.state.user.id,
+                })
+            }).then(response => response.json())
+              .then(count => {
+                this.setState(Object.assign(this.state.user, { entries: count}))
+              })
+
+            this.displayFaceBox(this.calculateFaceLocation(result));
+          }
         })
         .catch(error => console.log("error", error));
   }
@@ -100,22 +133,22 @@ class App extends Component {
     this.setState({route: route});
   }
   render() {
-    const {route, box, imageUrl} = this.state;
+    const {route, box, imageUrl, user} = this.state;
     return (
       <div className="App">
         <Navigation onRouteChange={this.onRouteChange} route={route}/>
         {
            route === "home" ?
            <div>
-              <Rank />
+              <Rank name={user.name} entries={user.entries}/>
               <ImageLinkForm onInputChange = {this.onInputChange} onButtonSubmit={ this.onSubmit }/>
               <FaceRecognition box={box} imageUrl={imageUrl} />
            </div> :
            (
             route === "signin" ?
-            <Signin onRouteChange={this.onRouteChange} />
+            <Signin onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
             :
-            <Register onRouteChange={this.onRouteChange}/>
+            <Register onRouteChange={this.onRouteChange} loadUser={this.loadUser}/>
            )
 
         }
