@@ -18,6 +18,10 @@ img {
     border-radius: 1em;
 }
 
+.hide {
+    display: none;
+}
+
 @media (max-width: 850px) {
     .container{
         width: 85vw;
