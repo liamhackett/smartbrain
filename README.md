@@ -5,7 +5,10 @@ To set up.
 
 1. run npm install
 
-2. To start development server: npm run start
+2. Create a secrets.js file in src and put 
+    export const PAT = "your personal access token";
+
+3. To start development server: npm run start
 
 
 
@@ -16,8 +19,7 @@ Color Pallete
 A0AAB2
 C4CACF
 
-TODO:
-- Fix responsiveness
+
 
 Ideas to improve project:
 - Add ranking on another page and show the leaderboards highlighting the signed in user
