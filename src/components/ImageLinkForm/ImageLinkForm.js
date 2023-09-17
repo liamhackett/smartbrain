@@ -1,8 +1,9 @@
 import React from "react";
 import "./ImageLinkForm.css";
 import { Button, Form } from "react-bootstrap";
-
-const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
+const ImageLinkForm = ({input, onInputChange, onButtonSubmit, onReset }) => {
     return (
         <div className="form">
             <div className="text-container">
@@ -17,8 +18,15 @@ const ImageLinkForm = ({ onInputChange, onButtonSubmit }) => {
                     placeholder="Image Link" 
                     className="focus" 
                     onChange={ onInputChange }
+                    value={input}
                     />
-                <Button variant="custom" size="lg" onClick={onButtonSubmit}>Detect</Button>
+                    <div className="buttons">
+                    <Button variant="custom" size="lg" onClick={onReset}>
+                        <FontAwesomeIcon icon={faArrowRotateLeft}/>
+                    </Button>
+                    <Button variant="custom" size="lg" onClick={onButtonSubmit}>Detect</Button>
+                    </div>
+                
             </div> 
         </div>
     );

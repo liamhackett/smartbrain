@@ -31,7 +31,8 @@
   background-color: inherit; 
   color: #2E3532; 
   border: 2px solid #2E3532;
-  margin-left: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
   
 .btn-custom:hover {
@@ -39,20 +40,9 @@
   color: #C4CACF;
 }
 
-  /* 
-    This button custom is for if there is no background for the input
-  .btn-custom {
-    background-color: inherit; 
-    color: #7E9181; 
-    border: 2px solid #7E9181;
-    margin-left: 10px;
-  }
-  
-  .btn-custom:hover {
-    background-color: #7E9181;
-    color: #333;
-  } */
-
+.buttons {
+  display: flex;
+}
   
 @media (max-width: 850px) {
   .input-container {
@@ -62,4 +52,5 @@
   .focus {
     margin: 5px;
   }
+  
 }

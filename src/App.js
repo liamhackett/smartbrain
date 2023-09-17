@@ -47,7 +47,6 @@ class App extends Component {
     this.state = {
       input: "",
       imageUrl: "",
-      box: {},
       route: "signin",
       user: {
         id: "",
@@ -56,7 +55,8 @@ class App extends Component {
         entries: 0,
         joined: ""
         
-      }
+      },
+      boxes: []
     }
   }
 
@@ -72,26 +72,28 @@ class App extends Component {
 
   }
   onInputChange = (event) => {
-    console.log(event.target.value);
     this.setState({input: event.target.value});
   }
   
   calculateFaceLocation = (data) => {
-    const clarifaiFace= data.outputs[0].data.regions[0].region_info.bounding_box;
-    const image = document.getElementById("inputImage");
-    const width = Number(image.width);
-    const height = Number(image.height);
-    return {
-      leftCol: clarifaiFace.left_col * width,
-      topRow: clarifaiFace.top_row * height,
-      rightCol: width - (clarifaiFace.right_col * width),
-      bottomRow: height - (clarifaiFace.bottom_row * height),
-    }
-  } 
-
-  displayFaceBox = (box) => {
-    this.setState({box: box})
-  }
+    return data.outputs[0].data.regions.map((region) => {
+      const clarifaiFace = region.region_info.bounding_box;
+      const image = document.getElementById("inputImage");
+      const width = Number(image.width);
+      const height = Number(image.height);
+      return {
+        leftCol: clarifaiFace.left_col * width,
+        topRow: clarifaiFace.top_row * height,
+        rightCol: width - clarifaiFace.right_col * width,
+        bottomRow: height - clarifaiFace.bottom_row * height,
+      };
+    });
+  };
+  
+  displayFaceBox = (boxes) => {
+    this.setState({ boxes });
+  };
+  
   // Eventually Add to display name of celebrities in pictures
   // displayCeleb = (concepts) => {
   //   const value = concepts.value;
@@ -109,7 +111,7 @@ class App extends Component {
     fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setRequestOptions(this.state.input))
         .then(response => response.json())
         .then(result => {
-          // this.displayCeleb(result.outputs[0].data.regions[0].data.concepts[0]); 
+          // this.displayCeleb(result.outputs[0].data.regions[0].data.concepts[0]);
           if(result){
               fetch("http://localhost:3001/image", 
               {
@@ -132,8 +134,13 @@ class App extends Component {
   onRouteChange = (route) =>{
     this.setState({route: route});
   }
+
+  onReset = () => {
+    this.setState({imageUrl: ""});
+    this.setState({input: ""});
+  }
   render() {
-    const {route, box, imageUrl, user} = this.state;
+    const {route, boxes, imageUrl, user} = this.state;
     return (
       <div className="App">
         <Navigation onRouteChange={this.onRouteChange} route={route}/>
@@ -141,8 +148,8 @@ class App extends Component {
            route === "home" ?
            <div>
               <Rank name={user.name} entries={user.entries}/>
-              <ImageLinkForm onInputChange = {this.onInputChange} onButtonSubmit={ this.onSubmit }/>
-              <FaceRecognition box={box} imageUrl={imageUrl} />
+              <ImageLinkForm input={this.state.input} onInputChange = {this.onInputChange} onButtonSubmit={ this.onSubmit } onReset={this.onReset}/>
+              <FaceRecognition boxes={boxes}  imageUrl={imageUrl} />
            </div> :
            (
             route === "signin" ?

@@ -4,8 +4,9 @@
 }
 img {
     border-radius: 1em;
-    width: 40vw;
+    width: 50vw;
     /* width: 700px; */
+    margin-bottom: 10px;
 }
 
 .bounding-box {
@@ -22,11 +23,11 @@ img {
         width: 85vw;
     }
     .image-container {
-        width: 75vw;
+        width: 85vw;
     }
-    /* img{
-        width: 600px;
-    } */
+    img{
+        width: 85vw;
+    }
 }
 /* @media (max-width: 500px) {
     img{
