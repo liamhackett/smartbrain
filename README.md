@@ -5,7 +5,7 @@ To set up.
 
 1. run npm install
 
-2. Create a secrets.js file in src and put 
+2. Create a secrets.js file in src and put: 
     export const PAT = "your personal access token";
 
 3. To start development server: npm run start
