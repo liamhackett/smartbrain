@@ -1,11 +1,16 @@
 import React from "react";
 import "./FaceRecognition.css";
 
-const FaceRecognition = ({ boxes, imageUrl }) => {
+const FaceRecognition = ({ boxes, imageUrl, isFile, format }) => {
   return (
     <div className="center ma">
       <div className="absolute mt2">
-        <img className="shadow-2" id="inputImage" alt="" src={imageUrl} />
+        {isFile ? (
+          <img className="shadow-2" id="inputImage" src={`data:${format};base64,${imageUrl}`} alt="" />
+        ) : (
+          <img className="shadow-2" id="inputImage" src={imageUrl} alt="" />
+        )}
+
         {boxes.map((box, index) => (
           <div
             key={index}

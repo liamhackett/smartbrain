@@ -20,6 +20,29 @@
     padding: 50px 25px;
     background-color: #7E9181;
 }
+.switch-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0 10px 10px 0;
+
+}
+.switch-container p{
+  margin: 0;
+}
+.form-group {
+  width: 100%;
+}
+.form-check-input {
+  border-color: #2E3532;
+  box-shadow: 0 0 0 0.2rem #2e353268 !important;
+  
+}
+
+.form-check-input:checked, .form-check-input:focus {
+  background-color: #2E3532;
+  border-color: #2E3532;
+  box-shadow: 0 0 0 0.2rem #2e353268 !important;
+}
 
 .focus:focus {
     border-color: #7E9181;

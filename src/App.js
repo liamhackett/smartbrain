@@ -7,12 +7,12 @@ import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 import { PAT } from "./secrets";
-const setRequestOptions = (url) => {
+const setRequestOptions = (isFile, input) => {
   const USER_ID = "lhackett";       
   const APP_ID = "smartbrain";
-  const IMAGE_URL = url;
-
-  const raw = JSON.stringify({
+  if (isFile){
+    const IMAGE_BYTES_STRING = input;
+    const raw = JSON.stringify({
       "user_app_id": {
           "user_id": USER_ID,
           "app_id": APP_ID
@@ -21,22 +21,51 @@ const setRequestOptions = (url) => {
           {
               "data": {
                   "image": {
-                      "url": IMAGE_URL
+                      "base64": IMAGE_BYTES_STRING
                   }
               }
           }
       ]
   });
-
   const requestOptions = {
+    method: "POST",
+    headers: {
+        "Accept": "application/json",
+        "Authorization": "Key " + PAT
+    },
+    body: raw
+  };
+  return requestOptions;
+
+  }
+  else {
+    const IMAGE_URL = input;
+    const raw = JSON.stringify({
+        "user_app_id": {
+            "user_id": USER_ID,
+            "app_id": APP_ID
+        },
+        "inputs": [
+            {
+                "data": {
+                    "image": {
+                        "url": IMAGE_URL
+                    }
+                }
+            }
+        ]
+    });
+    const requestOptions = {
       method: "POST",
       headers: {
           "Accept": "application/json",
           "Authorization": "Key " + PAT
       },
       body: raw
-  };
-  return requestOptions;
+    };
+    return requestOptions;
+
+  }
 }
 
 class App extends Component {
@@ -52,9 +81,10 @@ class App extends Component {
         email: "",
         entries: 0,
         joined: ""
-        
       },
-      boxes: []
+      boxes: [],
+      isFile: false,
+      format: ""
     }
   }
 
@@ -69,6 +99,21 @@ class App extends Component {
     })
 
   }
+  handleFileInputChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      this.setState({format: file.type});
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const base64String = reader.result.split(",")[1];
+        this.setState({input:base64String});
+
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
@@ -106,7 +151,7 @@ class App extends Component {
     this.setState({imageUrl: this.state.input});
 
     // fetch("https://api.clarifai.com/v2/models/celebrity-face-detection/outputs", setRequestOptions(this.state.input))
-    fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setRequestOptions(this.state.input))
+    fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setRequestOptions(this.state.isFile, this.state.input))
         .then(response => response.json())
         .then(result => {
           // this.displayCeleb(result.outputs[0].data.regions[0].data.concepts[0]);
@@ -136,9 +181,15 @@ class App extends Component {
   onReset = () => {
     this.setState({imageUrl: ""});
     this.setState({input: ""});
+    this.setState({boxes: []});
   }
+
+  toggleInputType = (isFile) => {
+    this.setState({isFile: !isFile});
+  }
+
   render() {
-    const {route, boxes, imageUrl, user} = this.state;
+    const {route, boxes, imageUrl, user, format, input, isFile} = this.state;
     return (
       <div className="App">
         <Navigation onRouteChange={this.onRouteChange} route={route}/>
@@ -146,8 +197,17 @@ class App extends Component {
            route === "home" ?
            <div>
               <Rank name={user.name} entries={user.entries}/>
-              <ImageLinkForm input={this.state.input} onInputChange = {this.onInputChange} onButtonSubmit={ this.onSubmit } onReset={this.onReset}/>
-              <FaceRecognition boxes={boxes}  imageUrl={imageUrl} />
+              <ImageLinkForm 
+                isFile={isFile} 
+                input={input} 
+                onInputChange = {this.onInputChange} 
+                onButtonSubmit={ this.onSubmit } 
+                onReset={this.onReset} 
+                toggleInputType={this.toggleInputType} 
+                handleFileInputChange={this.handleFileInputChange}
+                />
+
+              <FaceRecognition format={format} boxes={boxes} isFile={isFile} imageUrl={imageUrl} />
            </div> :
            (
             route === "signin" ?

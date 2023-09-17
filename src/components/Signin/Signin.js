@@ -52,6 +52,7 @@ class Signin extends Component {
               </Form.Group>
 
               <Button onClick={this.onSubmitSignIn} variant="custom" className="custom-btn mb-4 w-100">Sign in</Button>
+              {/* <Button onClick={onRouteChange("home")} variant="custom" className="custom-btn mb-4 w-100">Sign in</Button> */}
               <p className="sign-in-text">Don"t have an account? <span onClick={() => onRouteChange("register")} className="link">Sign Up</span></p>
             </Card.Body>
           </Row>
