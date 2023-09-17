@@ -6,10 +6,8 @@ import Rank from "./components/Rank/Rank";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
-
+import { PAT } from "./secrets";
 const setRequestOptions = (url) => {
-  // Your PAT (Personal Access Token) can be found in the portal under Authentification
-  const PAT = "dc3ea0fc6da94fc4b616df8fdcaa74b6";
   const USER_ID = "lhackett";       
   const APP_ID = "smartbrain";
   const IMAGE_URL = url;
