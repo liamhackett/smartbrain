@@ -34,6 +34,7 @@ const ImageLinkForm = ({ isFile, input, onInputChange, onButtonSubmit, onReset, 
               className="focus file-input"
               type="file"
               size="lg"
+            
               onChange={handleFileInputChange} 
               placeholder="Filename"
             />
