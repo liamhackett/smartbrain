@@ -69,6 +69,24 @@ const setRequestOptions = (isFile, input) => {
   }
 }
 
+const initialState = {
+    input: "",
+    imageUrl: "",
+    route: "signin",
+    user: {
+      id: "",
+      name: "",
+      email: "",
+      entries: 0,
+      joined: ""
+    },
+    boxes: [],
+    isFile: false,
+    format: "",
+    celebrity: false,
+    celebNames: [],
+    loading: false
+}
 class App extends Component {
   constructor() {
     super();
@@ -125,7 +143,12 @@ class App extends Component {
   }
   
   onRouteChange = (route) =>{
+    if(route === "signin") {
+      this.setState(initialState);
+    }
+
     this.setState({route: route});
+
   }
 
   onReset = () => {
