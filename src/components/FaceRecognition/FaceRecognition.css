@@ -38,6 +38,11 @@ img {
     border-radius: 1em;
 }
 
+.custom-spinner {
+    margin-top: 50px;
+    color: #7E9181;
+}
+
 @media (max-width: 850px) {
     .container{
         width: 85vw;

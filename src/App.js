@@ -87,7 +87,8 @@ class App extends Component {
       isFile: false,
       format: "",
       celebrity: false,
-      celebNames: []
+      celebNames: [],
+      loading: false
     }
   }
 
@@ -180,6 +181,7 @@ class App extends Component {
     this.setState({imageUrl: this.state.input});
     let url = this.state.celebrity ? "https://api.clarifai.com/v2/models/celebrity-face-detection/outputs" : "https://api.clarifai.com/v2/models/face-detection/outputs";
 
+    this.setState({loading: true});
     fetch(url,setRequestOptions(this.state.isFile, this.state.input))
       .then(response => response.json())
       .then(result => {
@@ -202,11 +204,14 @@ class App extends Component {
         this.displayFaceBox(this.calculateFaceLocation(result));
       }
     })
-    .catch(error => console.log("error", error));
+    .catch(error => console.log("error", error))
+    .finally( () => {
+      this.setState({ loading: false }); 
+    })
   }
 
   render() {
-    const {route, boxes, imageUrl, user, format, input, isFile, celebrity, celebNames} = this.state;
+    const {route, boxes, imageUrl, user, format, input, isFile, celebrity, celebNames, loading} = this.state;
     let model = celebrity ? "celebrity-face-detection" : "face-detection";
     return (
       <div className="App">
@@ -235,6 +240,7 @@ class App extends Component {
                 imageUrl={imageUrl} 
                 celebrity={celebrity}
                 celebNames={celebNames}
+                loading={loading}
                 />
                 <ModelSwitch model={model} celebrity={celebrity} toggleCelebrity={this.toggleCelebrity} onReset={this.onReset} />
            </div> :
