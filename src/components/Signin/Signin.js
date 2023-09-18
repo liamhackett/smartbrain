@@ -9,6 +9,7 @@ class Signin extends Component {
       signInEmail: "",
       signInPassword: "",
       rememberMe: false, 
+      invalid: "",
     };
   }
 
@@ -43,6 +44,30 @@ class Signin extends Component {
       localStorage.removeItem("rememberedEmail");
     }
 
+    // fetch("http://localhost:3001/signin", {
+    //   method: "post",
+    //   headers: { "Content-type": "application/json" },
+    //   body: JSON.stringify({
+    //     email: signInEmail,
+    //     password: this.state.signInPassword,
+    //   }),
+    // })
+    //   .then((response) => {
+    //     if(!response.ok) {
+    //       throw Error
+    //     }
+    //       response.json()
+    //   })
+    //   .then((user) => {
+    //     if (user.id) {
+    //       this.props.loadUser(user);
+    //       this.props.onRouteChange("home");
+    //     }
+    //   })
+    //   .catch(err => {
+    //     this.setState({invalid: "Invalid username or password"})
+    //     console.log("Invalid Username/Password");
+    //   })
     fetch("http://localhost:3001/signin", {
       method: "post",
       headers: { "Content-type": "application/json" },
@@ -51,13 +76,22 @@ class Signin extends Component {
         password: this.state.signInPassword,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
       .then((user) => {
         if (user.id) {
           this.props.loadUser(user);
           this.props.onRouteChange("home");
         }
+      })
+      .catch(() => {
+        this.setState({ invalid: "Invalid email or password" });
       });
+
   };
 
   render() {
@@ -97,7 +131,7 @@ class Signin extends Component {
                   onChange={this.onRememberMeChange}
                 />
               </Form.Group>
-
+              <p>{this.state.invalid}</p>
               <Button
                 onClick={this.onSubmitSignIn}
                 variant="custom"

@@ -1,7 +1,8 @@
 .model-switch-container {
-    position: fixed;
+    /* position: fixed;
     bottom: 20px;
-    right: 0;
+    right: 0; */
+    margin-top: 50px;
     padding: 5px;
     color: #C4CACF;
     display: flex;
