@@ -11,7 +11,7 @@ const ModelSwitch = ( { model, celebrity, onReset, toggleCelebrity }) => {
                     type="switch"
                     id="switch"
                     variant="custom"
-                    className="switch"
+                    className="switch shadow-2"
                     onChange={() => {
                         onReset();
                         toggleCelebrity(celebrity);

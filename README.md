@@ -22,6 +22,3 @@ C4CACF
 Command to start psql on localhost
 psql 'smart-brain'
 then open psql app
-
-TODO:  
-Profile page
