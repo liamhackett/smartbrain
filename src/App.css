@@ -2,3 +2,9 @@
   text-align: center;
 }
 
+.model-label {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  color: #C4CACF;
+}

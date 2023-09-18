@@ -84,7 +84,9 @@ class App extends Component {
       },
       boxes: [],
       isFile: false,
-      format: ""
+      format: "",
+      celebrity: false,
+      celebNames: []
     }
   }
 
@@ -137,24 +139,55 @@ class App extends Component {
     this.setState({ boxes });
   };
   
-  // Eventually Add to display name of celebrities in pictures
-  // displayCeleb = (concepts) => {
-  //   const value = concepts.value;
-  //   const name = concepts.name;
-  //   if (value > 0.75){
-  //     console.log(name);
-  //   }
-  // }
+  displayCeleb = (regions) => {
+    const celebNames = []; 
+
+    regions.forEach((region) => {
+      const value = region.data.concepts[0].value;
+      const name = region.data.concepts[0].name;
+      if (value > 0.5) {
+        celebNames.push(name);
+      }
+      else {
+        celebNames.push("")
+      }
+    });
+  
+    console.log(celebNames);
+    this.setState({celebNames: celebNames});
+  };
   
 
   onSubmit = () => {
     this.setState({imageUrl: this.state.input});
-
-    // fetch("https://api.clarifai.com/v2/models/celebrity-face-detection/outputs", setRequestOptions(this.state.input))
-    fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setRequestOptions(this.state.isFile, this.state.input))
+    if (this.state.celebrity){
+      fetch("https://api.clarifai.com/v2/models/celebrity-face-detection/outputs",setRequestOptions(this.state.isFile, this.state.input))
         .then(response => response.json())
         .then(result => {
-          // this.displayCeleb(result.outputs[0].data.regions[0].data.concepts[0]);
+          if(result){
+            console.log(result.outputs[0])
+            this.displayCeleb(result.outputs[0].data.regions);
+            fetch("http://localhost:3001/image", 
+            {
+              method: "put",
+              headers: {"Content-type": "application/json"},
+              body: JSON.stringify({
+                id: this.state.user.id,
+              })
+          }).then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, { entries: count}))
+            })
+
+          this.displayFaceBox(this.calculateFaceLocation(result));
+        }
+      })
+      .catch(error => console.log("error", error));
+    }
+    else{
+      fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setRequestOptions(this.state.isFile, this.state.input))
+        .then(response => response.json())
+        .then(result => {
           if(result){
               fetch("http://localhost:3001/image", 
               {
@@ -172,6 +205,7 @@ class App extends Component {
           }
         })
         .catch(error => console.log("error", error));
+    }
   }
 
   onRouteChange = (route) =>{
@@ -188,8 +222,14 @@ class App extends Component {
     this.setState({isFile: !isFile});
   }
 
+  toggleCelebrity = (celebrity) => {
+    this.setState({celebrity: !celebrity});
+  }
+
+
   render() {
-    const {route, boxes, imageUrl, user, format, input, isFile} = this.state;
+    const {route, boxes, imageUrl, user, format, input, isFile, celebrity, celebNames} = this.state;
+    let model = celebrity ? "celebrity-face-detection" : "face-detection";
     return (
       <div className="App">
         <Navigation onRouteChange={this.onRouteChange} route={route}/>
@@ -205,9 +245,18 @@ class App extends Component {
                 onReset={this.onReset} 
                 toggleInputType={this.toggleInputType} 
                 handleFileInputChange={this.handleFileInputChange}
+                toggleCelebrity={this.toggleCelebrity}
+                celebrity={celebrity}
                 />
 
-              <FaceRecognition format={format} boxes={boxes} isFile={isFile} imageUrl={imageUrl} />
+              <FaceRecognition 
+                format={format} 
+                boxes={boxes} 
+                isFile={isFile} 
+                imageUrl={imageUrl} 
+                celebrity={celebrity}
+                celebNames={celebNames}
+                />
            </div> :
            (
             route === "signin" ?
@@ -217,6 +266,9 @@ class App extends Component {
            )
 
         }
+        <div className="model-label">
+          Model: {model}
+        </div>
       </div>
     );
   }

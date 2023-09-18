@@ -1,10 +1,10 @@
 import React from "react";
 import "./FaceRecognition.css";
 
-const FaceRecognition = ({ boxes, imageUrl, isFile, format }) => {
+const FaceRecognition = ({ boxes, imageUrl, isFile, format, celebrity, celebNames }) => {
   return (
     <div className="center ma">
-      <div className="absolute mt2">
+      <div className="relative mt2">
         {isFile ? (
           <img className="shadow-2" id="inputImage" src={`data:${format};base64,${imageUrl}`} alt="" />
         ) : (
@@ -21,7 +21,13 @@ const FaceRecognition = ({ boxes, imageUrl, isFile, format }) => {
               bottom: box.bottomRow,
               left: box.leftCol,
             }}
-          ></div>
+          >
+            {celebrity && celebNames[index] && (
+              <div className="celeb-name">
+                <mark className="highlight">{celebNames[index]}</mark>
+              </div>
+            )}
+          </div>
         ))}
       </div>
     </div>
