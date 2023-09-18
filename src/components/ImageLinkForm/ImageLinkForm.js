@@ -11,20 +11,6 @@ const ImageLinkForm = ({ isFile, input, onInputChange, onButtonSubmit, onReset, 
         <h3 className="f3 text">
           Smart Brain will detect faces in your pictures. Give it a try!
         </h3>
-        <div className="celebrity-check-container shadow-2">
-          <p className="celeb-text">Try the Celebrity Face Recognition (Beta)!</p>
-          <Form.Check
-              type="switch"
-              id="switch"
-              variant="custom"
-              className="custom-switch"
-              onChange={() => {
-                  onReset();
-                  toggleCelebrity(celebrity);
-                }
-              }
-            />
-        </div>
       </div>
       <div className="input-container shadow-2">
         <div className="switch-container">

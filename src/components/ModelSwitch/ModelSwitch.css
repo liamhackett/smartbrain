@@ -1,0 +1,25 @@
+.model-switch-container {
+    position: fixed;
+    bottom: 20px;
+    right: 0;
+    padding: 5px;
+    color: #C4CACF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    opacity: .75;
+}
+.model-label {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    color: #C4CACF;
+    padding: 3px;
+  }
+
+.switch {
+    background-color: #7E9181;
+    border-radius: 1em;
+    width: 40px;
+}

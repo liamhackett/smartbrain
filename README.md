@@ -25,6 +25,8 @@ then open psql app
 
 TODO:  
 Add loading spinner when waiting for data for recognition
+    - Add state for loading: starts as false set to true after the fetch starts set back to false when the result comes back
+    - display it conditionally based upon the loading state
 (Takes a while when the file is uploaded)
 Move model switch to the bottom next to where it says model: 
 Profile page

@@ -7,6 +7,7 @@ import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 import { PAT } from "./secrets";
+import ModelSwitch from "./components/ModelSwitch/ModelSwitch";
 const setRequestOptions = (isFile, input) => {
   const USER_ID = "lhackett";       
   const APP_ID = "smartbrain";
@@ -222,6 +223,7 @@ class App extends Component {
                 onReset={this.onReset} 
                 toggleInputType={this.toggleInputType} 
                 handleFileInputChange={this.handleFileInputChange}
+
                 toggleCelebrity={this.toggleCelebrity}
                 celebrity={celebrity}
                 />
@@ -234,6 +236,7 @@ class App extends Component {
                 celebrity={celebrity}
                 celebNames={celebNames}
                 />
+                <ModelSwitch model={model} celebrity={celebrity} toggleCelebrity={this.toggleCelebrity} onReset={this.onReset} />
            </div> :
            (
             route === "signin" ?
@@ -243,9 +246,8 @@ class App extends Component {
            )
 
         }
-        <div className="model-label">
-          Model: {model}
-        </div>
+
+  
       </div>
     );
   }
