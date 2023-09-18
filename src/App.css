@@ -3,8 +3,9 @@
 }
 
 .model-label {
-  position: absolute;
-  bottom: 3px;
-  right: 3px;
+  position: fixed;
+  bottom: 0;
+  right: 0;
   color: #C4CACF;
+  padding: 3px;
 }

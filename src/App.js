@@ -101,6 +101,7 @@ class App extends Component {
     })
 
   }
+
   handleFileInputChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -116,10 +117,29 @@ class App extends Component {
       reader.readAsDataURL(file);
     }
   };
+
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
   
+  onRouteChange = (route) =>{
+    this.setState({route: route});
+  }
+
+  onReset = () => {
+    this.setState({imageUrl: ""});
+    this.setState({input: ""});
+    this.setState({boxes: []});
+  }
+
+  toggleInputType = (isFile) => {
+    this.setState({isFile: !isFile});
+  }
+
+  toggleCelebrity = (celebrity) => {
+    this.setState({celebrity: !celebrity});
+  }
+
   calculateFaceLocation = (data) => {
     return data.outputs[0].data.regions.map((region) => {
       const clarifaiFace = region.region_info.bounding_box;
@@ -152,80 +172,37 @@ class App extends Component {
         celebNames.push("")
       }
     });
-  
-    console.log(celebNames);
     this.setState({celebNames: celebNames});
   };
-  
 
   onSubmit = () => {
     this.setState({imageUrl: this.state.input});
-    if (this.state.celebrity){
-      fetch("https://api.clarifai.com/v2/models/celebrity-face-detection/outputs",setRequestOptions(this.state.isFile, this.state.input))
-        .then(response => response.json())
-        .then(result => {
-          if(result){
-            console.log(result.outputs[0])
+    let url = this.state.celebrity ? "https://api.clarifai.com/v2/models/celebrity-face-detection/outputs" : "https://api.clarifai.com/v2/models/face-detection/outputs";
+
+    fetch(url,setRequestOptions(this.state.isFile, this.state.input))
+      .then(response => response.json())
+      .then(result => {
+        if(result){
+          if (this.state.celebrity){
             this.displayCeleb(result.outputs[0].data.regions);
-            fetch("http://localhost:3001/image", 
-            {
-              method: "put",
-              headers: {"Content-type": "application/json"},
-              body: JSON.stringify({
-                id: this.state.user.id,
-              })
-          }).then(response => response.json())
-            .then(count => {
-              this.setState(Object.assign(this.state.user, { entries: count}))
-            })
-
-          this.displayFaceBox(this.calculateFaceLocation(result));
-        }
-      })
-      .catch(error => console.log("error", error));
-    }
-    else{
-      fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setRequestOptions(this.state.isFile, this.state.input))
-        .then(response => response.json())
-        .then(result => {
-          if(result){
-              fetch("http://localhost:3001/image", 
-              {
-                method: "put",
-                headers: {"Content-type": "application/json"},
-                body: JSON.stringify({
-                  id: this.state.user.id,
-                })
-            }).then(response => response.json())
-              .then(count => {
-                this.setState(Object.assign(this.state.user, { entries: count}))
-              })
-
-            this.displayFaceBox(this.calculateFaceLocation(result));
           }
-        })
-        .catch(error => console.log("error", error));
-    }
-  }
+          fetch("http://localhost:3001/image", 
+          {
+            method: "put",
+            headers: {"Content-type": "application/json"},
+            body: JSON.stringify({
+              id: this.state.user.id,
+            })
+        }).then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count}))
+          })
 
-  onRouteChange = (route) =>{
-    this.setState({route: route});
+        this.displayFaceBox(this.calculateFaceLocation(result));
+      }
+    })
+    .catch(error => console.log("error", error));
   }
-
-  onReset = () => {
-    this.setState({imageUrl: ""});
-    this.setState({input: ""});
-    this.setState({boxes: []});
-  }
-
-  toggleInputType = (isFile) => {
-    this.setState({isFile: !isFile});
-  }
-
-  toggleCelebrity = (celebrity) => {
-    this.setState({celebrity: !celebrity});
-  }
-
 
   render() {
     const {route, boxes, imageUrl, user, format, input, isFile, celebrity, celebNames} = this.state;
