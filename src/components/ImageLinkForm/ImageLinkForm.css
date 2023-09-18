@@ -3,6 +3,23 @@
 }
 .text-container {
   margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.celebrity-check-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #7E9181;
+  border-radius: 1em;
+  width: 35vw;
+}
+.celeb-text {
+  margin: 10px 0 0 0;
+  font-weight: bold;
 }
 .form {
     display: flex;
@@ -15,9 +32,8 @@
     justify-content: center;
     align-items: center;
     width: 50vw;
-    /* Delete the below code to get rid of the background for the input box */
     border-radius: 1em;
-    padding: 50px 25px;
+    padding: 25px 25px;
     background-color: #7E9181;
 }
 .switch-container {
@@ -66,8 +82,15 @@
 .buttons {
   display: flex;
 }
+
+
 @media (max-width: 1250px) {
   .input-container {
+    width: 65vw;
+    padding: 20px 25px;
+  }
+  .celebrity-check-container {
+   
     width: 65vw;
   }
   
@@ -76,9 +99,13 @@
   .input-container {
     flex-direction: column;
     width: 85vw;
+    padding: 10px 25px;
   }
   .focus {
     margin: 5px;
   }
-  
+  .celebrity-check-container {
+   
+    width: 85vw;
+  }
 }

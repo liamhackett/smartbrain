@@ -5,7 +5,6 @@
 img {
     border-radius: 1em;
     width: 50vw;
-    /* width: 700px; */
     margin-bottom: 10px;
 }
 
@@ -22,6 +21,35 @@ img {
     display: none;
 }
 
+.celeb-name{
+    text-transform: capitalize;
+    color: #2E3532;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    position: absolute;
+    bottom: 0;
+}
+
+.highlight {
+    background-color: #7e9181a9;
+    padding: 5px;
+    border-radius: 1em;
+}
+
+.custom-spinner {
+    margin-top: 50px;
+    color: #7E9181;
+}
+
+.custom-spinner-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+  }
+  
+
 @media (max-width: 850px) {
     .container{
         width: 85vw;
@@ -32,9 +60,11 @@ img {
     img{
         width: 85vw;
     }
-}
-/* @media (max-width: 500px) {
-    img{
-        width: 300px;
+    .highlight {
+        background-color: #7e918181;
+        padding: 1px;
     }
-} */
+    .celeb-name{
+        font-size: small;
+    }
+}

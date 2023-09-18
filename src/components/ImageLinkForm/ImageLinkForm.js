@@ -4,7 +4,7 @@ import { Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
-const ImageLinkForm = ({ isFile, input, onInputChange, onButtonSubmit, onReset, toggleInputType, handleFileInputChange }) => {
+const ImageLinkForm = ({ isFile, input, onInputChange, onButtonSubmit, onReset, toggleInputType, handleFileInputChange, toggleCelebrity, celebrity }) => {
   return (
     <div className="form">
       <div className="text-container">

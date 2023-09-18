@@ -7,6 +7,7 @@ import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
 import { PAT } from "./secrets";
+import ModelSwitch from "./components/ModelSwitch/ModelSwitch";
 const setRequestOptions = (isFile, input) => {
   const USER_ID = "lhackett";       
   const APP_ID = "smartbrain";
@@ -84,7 +85,10 @@ class App extends Component {
       },
       boxes: [],
       isFile: false,
-      format: ""
+      format: "",
+      celebrity: false,
+      celebNames: [],
+      loading: false
     }
   }
 
@@ -99,6 +103,7 @@ class App extends Component {
     })
 
   }
+
   handleFileInputChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -114,10 +119,29 @@ class App extends Component {
       reader.readAsDataURL(file);
     }
   };
+
   onInputChange = (event) => {
     this.setState({input: event.target.value});
   }
   
+  onRouteChange = (route) =>{
+    this.setState({route: route});
+  }
+
+  onReset = () => {
+    this.setState({imageUrl: ""});
+    this.setState({input: ""});
+    this.setState({boxes: []});
+  }
+
+  toggleInputType = (isFile) => {
+    this.setState({isFile: !isFile});
+  }
+
+  toggleCelebrity = (celebrity) => {
+    this.setState({celebrity: !celebrity});
+  }
+
   calculateFaceLocation = (data) => {
     return data.outputs[0].data.regions.map((region) => {
       const clarifaiFace = region.region_info.bounding_box;
@@ -137,59 +161,58 @@ class App extends Component {
     this.setState({ boxes });
   };
   
-  // Eventually Add to display name of celebrities in pictures
-  // displayCeleb = (concepts) => {
-  //   const value = concepts.value;
-  //   const name = concepts.name;
-  //   if (value > 0.75){
-  //     console.log(name);
-  //   }
-  // }
-  
+  displayCeleb = (regions) => {
+    const celebNames = []; 
+
+    regions.forEach((region) => {
+      const value = region.data.concepts[0].value;
+      const name = region.data.concepts[0].name;
+      if (value > 0.5) {
+        celebNames.push(name);
+      }
+      else {
+        celebNames.push("")
+      }
+    });
+    this.setState({celebNames: celebNames});
+  };
 
   onSubmit = () => {
     this.setState({imageUrl: this.state.input});
+    let url = this.state.celebrity ? "https://api.clarifai.com/v2/models/celebrity-face-detection/outputs" : "https://api.clarifai.com/v2/models/face-detection/outputs";
 
-    // fetch("https://api.clarifai.com/v2/models/celebrity-face-detection/outputs", setRequestOptions(this.state.input))
-    fetch("https://api.clarifai.com/v2/models/face-detection/outputs", setRequestOptions(this.state.isFile, this.state.input))
-        .then(response => response.json())
-        .then(result => {
-          // this.displayCeleb(result.outputs[0].data.regions[0].data.concepts[0]);
-          if(result){
-              fetch("http://localhost:3001/image", 
-              {
-                method: "put",
-                headers: {"Content-type": "application/json"},
-                body: JSON.stringify({
-                  id: this.state.user.id,
-                })
-            }).then(response => response.json())
-              .then(count => {
-                this.setState(Object.assign(this.state.user, { entries: count}))
-              })
-
-            this.displayFaceBox(this.calculateFaceLocation(result));
+    this.setState({loading: true});
+    fetch(url,setRequestOptions(this.state.isFile, this.state.input))
+      .then(response => response.json())
+      .then(result => {
+        if(result){
+          if (this.state.celebrity){
+            this.displayCeleb(result.outputs[0].data.regions);
           }
-        })
-        .catch(error => console.log("error", error));
-  }
+          fetch("http://localhost:3001/image", 
+          {
+            method: "put",
+            headers: {"Content-type": "application/json"},
+            body: JSON.stringify({
+              id: this.state.user.id,
+            })
+        }).then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count}))
+          })
 
-  onRouteChange = (route) =>{
-    this.setState({route: route});
-  }
-
-  onReset = () => {
-    this.setState({imageUrl: ""});
-    this.setState({input: ""});
-    this.setState({boxes: []});
-  }
-
-  toggleInputType = (isFile) => {
-    this.setState({isFile: !isFile});
+        this.displayFaceBox(this.calculateFaceLocation(result));
+      }
+    })
+    .catch(error => console.log("error", error))
+    .finally( () => {
+      this.setState({ loading: false }); 
+    })
   }
 
   render() {
-    const {route, boxes, imageUrl, user, format, input, isFile} = this.state;
+    const {route, boxes, imageUrl, user, format, input, isFile, celebrity, celebNames, loading} = this.state;
+    let model = celebrity ? "celebrity-face-detection" : "face-detection";
     return (
       <div className="App">
         <Navigation onRouteChange={this.onRouteChange} route={route}/>
@@ -205,9 +228,21 @@ class App extends Component {
                 onReset={this.onReset} 
                 toggleInputType={this.toggleInputType} 
                 handleFileInputChange={this.handleFileInputChange}
+
+                toggleCelebrity={this.toggleCelebrity}
+                celebrity={celebrity}
                 />
 
-              <FaceRecognition format={format} boxes={boxes} isFile={isFile} imageUrl={imageUrl} />
+              <FaceRecognition 
+                format={format} 
+                boxes={boxes} 
+                isFile={isFile} 
+                imageUrl={imageUrl} 
+                celebrity={celebrity}
+                celebNames={celebNames}
+                loading={loading}
+                />
+                <ModelSwitch model={model} celebrity={celebrity} toggleCelebrity={this.toggleCelebrity} onReset={this.onReset} />
            </div> :
            (
             route === "signin" ?
@@ -217,6 +252,8 @@ class App extends Component {
            )
 
         }
+
+  
       </div>
     );
   }
