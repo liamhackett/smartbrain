@@ -1,5 +1,6 @@
 Welcome to Smartbrain. 
-Smartbrain is a react app that incorporates the Clarafai API to identify faces in pictures provided by a url.
+Smartbrain is a react app that incorporates the Clarafai API to identify faces in pictures provided by a url or a file.
+If you switch models you are able to upload a photos containing celebrities and the AI will display the names of the celebrities identified in the pictures.
 
 To set up.
 
