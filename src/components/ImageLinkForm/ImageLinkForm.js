@@ -1,10 +1,11 @@
-import React from "react";
+import React, { createRef } from "react";
 import "./ImageLinkForm.css";
 import { Button, Form } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRotateLeft } from "@fortawesome/free-solid-svg-icons";
 
 const ImageLinkForm = ({ isFile, input, onInputChange, onButtonSubmit, onReset, toggleInputType, handleFileInputChange }) => {
+  const fileInputRef = createRef();
   return (
     <div className="form">
       <div className="text-container">
@@ -31,6 +32,7 @@ const ImageLinkForm = ({ isFile, input, onInputChange, onButtonSubmit, onReset, 
         {isFile ? (
           <Form.Group controlId="formFileLg" className="form-group">
             <Form.Control
+              ref={fileInputRef}
               className="focus file-input"
               type="file"
               size="lg"
@@ -49,10 +51,20 @@ const ImageLinkForm = ({ isFile, input, onInputChange, onButtonSubmit, onReset, 
           />
         )}
         <div className="buttons">
-          <Button variant="custom" size="lg" onClick={onReset}>
+          <Button variant="custom" size="lg" onClick={() => {
+              onReset();
+              if (fileInputRef.current) {
+                fileInputRef.current.value = ""; 
+              }
+            }}>
             <FontAwesomeIcon icon={faArrowRotateLeft} />
           </Button>
-          <Button variant="custom" size="lg" onClick={onButtonSubmit}>
+          <Button variant="custom" size="lg" onClick={() => {
+              onButtonSubmit();
+              if (fileInputRef.current) {
+                fileInputRef.current.value = ""; 
+              }
+            }}>
             Detect
           </Button>
         </div>
