@@ -6,68 +6,7 @@ import Rank from "./components/Rank/Rank";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition";
 import Signin from "./components/Signin/Signin";
 import Register from "./components/Register/Register";
-import { PAT } from "./secrets";
 import ModelSwitch from "./components/ModelSwitch/ModelSwitch";
-const setRequestOptions = (isFile, input) => {
-  const USER_ID = "lhackett";       
-  const APP_ID = "smartbrain";
-  if (isFile){
-    const IMAGE_BYTES_STRING = input;
-    const raw = JSON.stringify({
-      "user_app_id": {
-          "user_id": USER_ID,
-          "app_id": APP_ID
-      },
-      "inputs": [
-          {
-              "data": {
-                  "image": {
-                      "base64": IMAGE_BYTES_STRING
-                  }
-              }
-          }
-      ]
-  });
-  const requestOptions = {
-    method: "POST",
-    headers: {
-        "Accept": "application/json",
-        "Authorization": "Key " + PAT
-    },
-    body: raw
-  };
-  return requestOptions;
-
-  }
-  else {
-    const IMAGE_URL = input;
-    const raw = JSON.stringify({
-        "user_app_id": {
-            "user_id": USER_ID,
-            "app_id": APP_ID
-        },
-        "inputs": [
-            {
-                "data": {
-                    "image": {
-                        "url": IMAGE_URL
-                    }
-                }
-            }
-        ]
-    });
-    const requestOptions = {
-      method: "POST",
-      headers: {
-          "Accept": "application/json",
-          "Authorization": "Key " + PAT
-      },
-      body: raw
-    };
-    return requestOptions;
-
-  }
-}
 
 const initialState = {
     input: "",
@@ -85,7 +24,10 @@ const initialState = {
     format: "",
     celebrity: false,
     celebNames: [],
-    loading: false
+    loading: false,
+    file: undefined,
+    fileBytes: "", 
+    submit: false
 }
 class App extends Component {
   constructor() {
@@ -106,7 +48,10 @@ class App extends Component {
       format: "",
       celebrity: false,
       celebNames: [],
-      loading: false
+      loading: false,
+      file: undefined,
+      fileBytes: "",
+      submit: false
     }
   }
 
@@ -126,11 +71,12 @@ class App extends Component {
     const file = event.target.files[0];
     if (file) {
       this.setState({format: file.type});
+      this.setState({file: file});
       const reader = new FileReader();
 
       reader.onload = () => {
         const base64String = reader.result.split(",")[1];
-        this.setState({input:base64String});
+        this.setState({fileBytes: base64String});
 
       };
 
@@ -155,6 +101,8 @@ class App extends Component {
     this.setState({imageUrl: ""});
     this.setState({input: ""});
     this.setState({boxes: []});
+    this.setState({fileBytes: ""});
+    this.setState({submit: false});
   }
 
   toggleInputType = (isFile) => {
@@ -201,40 +149,57 @@ class App extends Component {
   };
 
   onSubmit = () => {
-    this.setState({imageUrl: this.state.input});
-    let url = this.state.celebrity ? "https://api.clarifai.com/v2/models/celebrity-face-detection/outputs" : "https://api.clarifai.com/v2/models/face-detection/outputs";
+    this.setState({ imageUrl: this.state.input });
+    let modelId = this.state.celebrity ? "celebrity-face-detection" : "face-detection";
+    const formData = new FormData();
 
-    this.setState({loading: true});
-    fetch(url,setRequestOptions(this.state.isFile, this.state.input))
+    if (this.state.isFile) {
+      formData.append('modelId', modelId);
+      formData.append('isFile', true);
+      formData.append('file', this.state.file);
+    } else {
+      formData.append('modelId', modelId);
+      formData.append('isFile', false);
+      formData.append('imageUrl', this.state.input);
+    }
+    
+    this.setState({ loading: true }); 
+    this.setState({ submit: true });
+    fetch("http://localhost:3001/api", {
+      method: "post",
+      body: formData, 
+    })
       .then(response => response.json())
       .then(result => {
-        if(result){
-          if (this.state.celebrity){
+        if (result) {
+          if (this.state.celebrity) {
             this.displayCeleb(result.outputs[0].data.regions);
           }
-          fetch("http://localhost:3001/image", 
-          {
-            method: "put",
-            headers: {"Content-type": "application/json"},
+          fetch('http://localhost:3001/image', {
+            method: 'put',
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
-              id: this.state.user.id,
+              id: this.state.user.id
             })
-        }).then(response => response.json())
-          .then(count => {
-            this.setState(Object.assign(this.state.user, { entries: count}))
           })
+          .then(response => response.json())
+          .then(count => {
+            this.setState(Object.assign(this.state.user, { entries: count }))
+          })
+          .catch(console.log)
+        }
+        this.displayFaceBox(this.calculateFaceLocation(result))
+      })
+      .catch(err => console.log(err))
+      .finally(() => {
+        this.setState({ loading: false }); 
+      });
+  };
+  
 
-        this.displayFaceBox(this.calculateFaceLocation(result));
-      }
-    })
-    .catch(error => console.log("error", error))
-    .finally( () => {
-      this.setState({ loading: false }); 
-    })
-  }
-
+  
   render() {
-    const {route, boxes, imageUrl, user, format, input, isFile, celebrity, celebNames, loading} = this.state;
+    const {route, boxes, imageUrl, user, format, input, isFile, celebrity, celebNames, loading, fileBytes, submit} = this.state;
     let model = celebrity ? "celebrity-face-detection" : "face-detection";
     return (
       <div className="App">
@@ -264,6 +229,8 @@ class App extends Component {
                 celebrity={celebrity}
                 celebNames={celebNames}
                 loading={loading}
+                fileBytes={fileBytes}
+                submit={submit}
                 />
                 <ModelSwitch model={model} celebrity={celebrity} toggleCelebrity={this.toggleCelebrity} onReset={this.onReset} />
            </div> :

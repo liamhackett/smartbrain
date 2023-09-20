@@ -1,18 +1,9 @@
-import React, { Component } from "react";
+import React from "react";
 import "./FaceRecognition.css";
 import { Spinner } from "react-bootstrap";
-class FaceRecognition extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      display: "none"
-    };
-  }
-  
-  render() {
-    const { boxes, imageUrl, isFile, format, celebrity, celebNames, loading } = this.props;
 
-    return (
+const FaceRecognition = ( { boxes, imageUrl, isFile, format, celebrity, celebNames, loading, fileBytes, submit } ) => 
+    (
       <div className="center ma">  
         <div className="relative mt2">
           <div className="custom-spinner-container">
@@ -24,11 +15,11 @@ class FaceRecognition extends Component {
             )
           }
           </div>
-          {isFile ? (
+          {isFile && fileBytes !== "" && submit === true? (
             <img
               className="shadow-2"
               id="inputImage"
-              src={`data:${format};base64,${imageUrl}`}
+              src={`data:${format};base64,${fileBytes}`}
               alt=""
               style={{ visibility: loading ? "hidden" : "" }}
             />
@@ -65,7 +56,5 @@ class FaceRecognition extends Component {
 
       </div>
     );
-  }
-};
 
 export default FaceRecognition;
