@@ -23,3 +23,16 @@ C4CACF
 Command to start psql on localhost
 psql 'smart-brain'
 then open psql app
+
+TODO:
+Move API Calls to the backend
+    Have a function for celeb and regular calls
+    fetch whichever one based on what the celebrity state is
+
+    Pass MODEL_ID and Image(as an object {base64: ...} or {url: ...})
+
+    to pass them to the backend you can add them as body parameters
+
+
+    URL link works
+    Upload is having issues displaying after results are sent.
