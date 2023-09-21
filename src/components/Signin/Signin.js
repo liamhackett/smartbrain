@@ -14,7 +14,7 @@ class Signin extends Component {
   }
 
   componentDidMount() {
-    // Check if there's a stored email in localStorage
+    // Check if there"s a stored email in localStorage
     const storedEmail = localStorage.getItem("rememberedEmail");
 
     if (storedEmail) {
@@ -43,31 +43,7 @@ class Signin extends Component {
     } else {
       localStorage.removeItem("rememberedEmail");
     }
-
-    // fetch("http://localhost:3001/signin", {
-    //   method: "post",
-    //   headers: { "Content-type": "application/json" },
-    //   body: JSON.stringify({
-    //     email: signInEmail,
-    //     password: this.state.signInPassword,
-    //   }),
-    // })
-    //   .then((response) => {
-    //     if(!response.ok) {
-    //       throw Error
-    //     }
-    //       response.json()
-    //   })
-    //   .then((user) => {
-    //     if (user.id) {
-    //       this.props.loadUser(user);
-    //       this.props.onRouteChange("home");
-    //     }
-    //   })
-    //   .catch(err => {
-    //     this.setState({invalid: "Invalid username or password"})
-    //     console.log("Invalid Username/Password");
-    //   })
+    
     fetch("http://localhost:3001/signin", {
       method: "post",
       headers: { "Content-type": "application/json" },
@@ -140,7 +116,7 @@ class Signin extends Component {
                 Sign in
               </Button>
               <p className="sign-in-text">
-                Don't have an account?{" "}
+                Don"t have an account?{" "}
                 <span onClick={() => onRouteChange("register")} className="link">
                   Sign Up
                 </span>

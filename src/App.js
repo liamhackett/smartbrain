@@ -154,13 +154,13 @@ class App extends Component {
     const formData = new FormData();
 
     if (this.state.isFile) {
-      formData.append('modelId', modelId);
-      formData.append('isFile', true);
-      formData.append('file', this.state.file);
+      formData.append("modelId", modelId);
+      formData.append("isFile", true);
+      formData.append("file", this.state.file);
     } else {
-      formData.append('modelId', modelId);
-      formData.append('isFile', false);
-      formData.append('imageUrl', this.state.input);
+      formData.append("modelId", modelId);
+      formData.append("isFile", false);
+      formData.append("imageUrl", this.state.input);
     }
     
     this.setState({ loading: true }); 
@@ -175,9 +175,9 @@ class App extends Component {
           if (this.state.celebrity) {
             this.displayCeleb(result.outputs[0].data.regions);
           }
-          fetch('http://localhost:3001/image', {
-            method: 'put',
-            headers: {'Content-Type': 'application/json'},
+          fetch("http://localhost:3001/image", {
+            method: "put",
+            headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
               id: this.state.user.id
             })
