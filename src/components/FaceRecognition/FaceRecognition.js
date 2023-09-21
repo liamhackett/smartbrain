@@ -15,7 +15,7 @@ const FaceRecognition = ( { boxes, imageUrl, isFile, format, celebrity, celebNam
             )
           }
           </div>
-          {isFile && fileBytes !== "" && submit === true? (
+          {isFile && fileBytes !== "" && submit ? (
             <img
               className="shadow-2"
               id="inputImage"
