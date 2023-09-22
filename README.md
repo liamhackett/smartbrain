@@ -3,13 +3,15 @@ Smartbrain is a react app that incorporates the Clarafai API to identify faces i
 If you switch models you are able to upload a photos containing celebrities and the AI will display the names of the celebrities identified in the pictures.
 
 To set up.
+The server for this site is hosted on Heroku.
+
+If you want to run this yourself and edit it
 
 1. run npm install
 
-2. Create a secrets.js file in src and put: 
-    export const PAT = "your personal access token";
+2. To start development server: npm run start
 
-3. To start development server: npm run start
+3. Upload to github pages to host front end
 
 
 

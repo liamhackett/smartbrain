@@ -45,7 +45,7 @@ class Register extends Component {
       return;
     }
 
-    fetch("http://localhost:3001/register", {
+    fetch("https://sleepy-brook-78639-a1e6e03111c1.herokuapp.com/register", {
       method: "post",
       headers: { "Content-type": "application/json" },
       body: JSON.stringify({

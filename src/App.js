@@ -165,7 +165,7 @@ class App extends Component {
     
     this.setState({ loading: true }); 
     this.setState({ submit: true });
-    fetch("http://localhost:3001/api", {
+    fetch("https://sleepy-brook-78639-a1e6e03111c1.herokuapp.com/api", {
       method: "post",
       body: formData, 
     })
@@ -175,7 +175,7 @@ class App extends Component {
           if (this.state.celebrity) {
             this.displayCeleb(result.outputs[0].data.regions);
           }
-          fetch("http://localhost:3001/image", {
+          fetch("https://sleepy-brook-78639-a1e6e03111c1.herokuapp.com/image", {
             method: "put",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
